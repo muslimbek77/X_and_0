@@ -2,7 +2,8 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 from PyQt6.QtWidgets import QMessageBox, QMainWindow, QApplication
 from game import Gamecheck
 from stylehelp import Stleship
-
+import random
+import time
 
 class Ui_MainWindow(QMainWindow):
     def restart(self):
@@ -11,23 +12,35 @@ class Ui_MainWindow(QMainWindow):
             btn.setEnabled(True)
         self.cur_play = 1
         self.lbl_x.setStyleSheet(Stleship.activate())
-        self.lbl_o.setStyleSheet(Stleship.not_activate())      
+        self.lbl_o.setStyleSheet(Stleship.not_activate())   
+
     def click_btn(self, num:int):
         if self.cur_play == 1:
             self.btn_lst[num].setStyleSheet("color: brown;font-size:35px;")
             self.btn_lst[num].setText("X")
             self.btn_lst[num].setEnabled(False)
             self.cur_play = 0
+
             self.lbl_o.setStyleSheet(Stleship.activate())
             self.lbl_x.setStyleSheet(Stleship.not_activate())
-            
-        else:
-            self.btn_lst[num].setStyleSheet("color: green;font-size:35px;")
-            self.btn_lst[num].setText("O")
-            self.btn_lst[num].setEnabled(False)
-            self.cur_play = 1
-            self.lbl_x.setStyleSheet(Stleship.activate())
-            self.lbl_o.setStyleSheet(Stleship.not_activate())
+            try:
+                ans = self.gm_check.check_winner()
+                if ans != None:
+                    QMessageBox.information(None,"TABRIKLAYMIZ",ans+"  \n"+"SIZ GOLIBSIZ")
+                    self.restart()
+                btn = random.choice(list(filter(lambda x:x.text()=="",self.btn_lst)))
+                btn.setStyleSheet("color: green;font-size:35px;")
+                btn.setText("O")
+                btn.setEnabled(False)
+                self.cur_play = 1
+                self.lbl_x.setStyleSheet(Stleship.activate())
+                self.lbl_o.setStyleSheet(Stleship.not_activate())
+                if list(filter(lambda x:x.text()=="",self.btn_lst))==[]:
+                    QMessageBox.information(None,"TABRIKLAYMIZ","Durrang")
+                    self.restart()
+            except:
+                QMessageBox.information(None,"TABRIKLAYMIZ","Durrang")
+                self.restart()
             
         ans = self.gm_check.check_winner()
         if ans != None:
@@ -109,6 +122,7 @@ class Ui_MainWindow(QMainWindow):
         self.btn_7.setMinimumSize(QtCore.QSize(100, 100))
         self.btn_7.setText("")
         self.btn_7.setObjectName("btn_7")
+        
         self.gridLayout.addWidget(self.btn_7, 2, 0, 1, 1)
         self.btn_6 = QtWidgets.QPushButton(parent=self.tab_2)
         self.btn_6.setMinimumSize(QtCore.QSize(100, 100))
@@ -222,8 +236,8 @@ class Ui_MainWindow(QMainWindow):
 "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:18pt;\">Botirov</span></p>\n"
 "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:18pt;\">Muhammadumar</span></p></body></html>"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("MainWindow", "O\'yin haqida"))
-        self.lbl_x.setText(_translate("MainWindow", "X"))
-        self.lbl_o.setText(_translate("MainWindow", "O"))
+        self.lbl_x.setText(_translate("MainWindow", "Player"))
+        self.lbl_o.setText(_translate("MainWindow", "Computer"))
         self.pushButton.setText(_translate("MainWindow", "Restart"))
         self.pushButton_3.setText(_translate("MainWindow", "O\'yin haqida"))
         self.pushButton_2.setText(_translate("MainWindow", "Exit"))

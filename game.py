@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import QPushButton
 class Gamecheck:
-    def __init__(self,btn_ls:list ,first="X", second ="O") -> None:
+    def __init__(self,btn_ls:list ,first="X", second ="Computer") -> None:
         self.first_pl = first
         self.second_pl = second
         self.btn_lst = btn_ls
